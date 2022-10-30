@@ -12,26 +12,25 @@ int main (int argc, char* args[])
     SDL_Renderer* ren = SDL_CreateRenderer(win, -1, 0);
 
     /* EXECUÇÃO */
-    SDL_SetRenderDrawColor(ren, 0x00,0x00,0x00,0x00);
+    SDL_SetRenderDrawColor(ren, 0xFF,0xFF,0xFF,0x00);
     SDL_RenderClear(ren);
-    SDL_SetRenderDrawColor(ren, 0x00,0x00,0xFF,0x50);
-    SDL_Rect r = { 40,20, 10,10 };
-    SDL_RenderFillRect(ren, &r);
-    SDL_SetRenderDrawColor(ren, 0xFF,0x69,0xB4,0x00);
-    SDL_RenderDrawLine(ren, 100, 100, 100, 200);
-    SDL_RenderDrawLine(ren, 100, 200, 200, 200);
-    SDL_RenderDrawLine(ren, 100, 100, 200, 200);
-    SDL_RenderDrawPoint(ren,100, 400);
-    SDL_SetRenderDrawColor(ren, 0x00,0xFF,0x00,0x00); 
-    SDL_RenderDrawLine(ren, 400, 100, 400, 200);
-    SDL_RenderDrawLine(ren, 400, 200, 200, 200);
-    SDL_RenderDrawLine(ren, 400, 100, 200, 200);   
-    
-    SDL_SetRenderDrawColor(ren, 0xFF,0xFF,0xFF,0xFF); 
-    SDL_RenderDrawLine(ren, 100, 100, 200, 200);
-    SDL_RenderDrawLine(ren, 200, 200, 400, 100);
-    SDL_RenderDrawLine(ren, 100, 100, 400, 100);
-    
+    SDL_SetRenderDrawColor(ren, 0x00,0x00,0x00,0x00);
+    SDL_Rect r = { 100,200, 200,200 };
+    SDL_RenderDrawRect(ren, &r);
+    SDL_SetRenderDrawColor(ren, 0x96,0x4B,0x00,0x00);
+    SDL_Rect s = { 160,300, 80,100 };
+    SDL_RenderFillRect(ren, &s);
+    /*Desenha telhado*/
+    SDL_SetRenderDrawColor(ren, 0xFF,0x00,0x00,0x00);
+    SDL_RenderDrawLine(ren, 100, 200, 200, 100);
+    SDL_RenderDrawLine(ren, 200, 100, 300, 200);
+    SDL_RenderDrawLine(ren, 200, 100, 300, 0);
+    SDL_RenderDrawLine(ren, 300, 0, 400, 100);
+    /*Desenha lado da casa*/
+    SDL_SetRenderDrawColor(ren, 0x00,0x00,0x00,0x00); 
+    SDL_RenderDrawLine(ren, 300, 400, 400, 300);
+    SDL_RenderDrawLine(ren, 300, 200, 400, 100);
+    SDL_RenderDrawLine(ren, 400, 300, 400, 100);
     SDL_RenderPresent(ren);
     SDL_Delay(5000);
 
