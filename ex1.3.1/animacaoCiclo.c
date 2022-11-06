@@ -30,10 +30,10 @@ int main (int argc, char* args[])
         else if(r.x <= 0 || r.x >= 350){
         	variavelX = variavelX * (-1);
         }
+        SDL_Delay(500);
         r.y = r.y + 5*variavelY;
         r.x = r.x + 5*variavelX; 
-        SDL_RenderPresent(ren);
-        SDL_Delay(500);
+        SDL_RenderPresent(ren);    
     }
     /* FINALIZACAO */
     SDL_DestroyRenderer(ren);
