@@ -13,16 +13,21 @@ int main (int argc, char* args[])
     /* EXECUÇÃO */
     int variavelX = 1;
     int variavelY = 1;
-    SDL_Rect r = { 150,200, 50,50 };
+    SDL_Rect r = { 100,100, 50,50 };
     while (r.x != 1000) {
         SDL_SetRenderDrawColor(ren, 0xFF,0xFF,0xFF,0x00);
         SDL_RenderClear(ren);
         SDL_SetRenderDrawColor(ren, 0x00,0x00,0xFF,0x00);
         SDL_RenderFillRect(ren, &r);
-        if(r.y == 350 || r.y == 0){
+        if(r.x == 0 && r.y == 0 || r.x == 0 && r.y == 350 || r.x == 350 && r.y == 0 || r.x == 350 && r.y == 350){
+        	variavelY = variavelY * (-1);
+        	variavelX = variavelX * (-1);
+        	r.x = r.x + 1;
+        }
+        else if(r.y >= 350 || r.y <= 0){
         	variavelY = variavelY * (-1);
         }
-        else if(r.x == 0 || r.x == 350){
+        else if(r.x <= 0 || r.x >= 350){
         	variavelX = variavelX * (-1);
         }
         r.y = r.y + 5*variavelY;
