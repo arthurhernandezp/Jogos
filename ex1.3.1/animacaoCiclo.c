@@ -13,7 +13,7 @@ int main (int argc, char* args[])
     /* EXECUÇÃO */
     int variavelX = 1;
     int variavelY = 1;
-    SDL_Rect r = { 100,100, 50,50 };
+    SDL_Rect r = { 150,200, 50,50 };
     while (r.x != 1000) {
         SDL_SetRenderDrawColor(ren, 0xFF,0xFF,0xFF,0x00);
         SDL_RenderClear(ren);
@@ -33,7 +33,7 @@ int main (int argc, char* args[])
         r.y = r.y + 5*variavelY;
         r.x = r.x + 5*variavelX; 
         SDL_RenderPresent(ren);
-        SDL_Delay(300);
+        SDL_Delay(500);
     }
     /* FINALIZACAO */
     SDL_DestroyRenderer(ren);
