@@ -4,17 +4,18 @@
 
 int AUX_WaitEventTimeoutCount (SDL_Event* evt, Uint32* ms){
 	Uint32 antes = SDL_GetTicks();
-	if(SDL_WaitEventTimeout(evt, *ms)){
-		*ms = *ms - (SDL_GetTicks() - antes);
-		if(*ms < 0){
-		        *ms = 0;
-		}
-		return 1;
+	Uint32 depois = 0;
+	int isevt = SDL_WaitEventTimeout(evt, *ms);
+	if(isevt){
+		depois = (SDL_GetTicks() - antes);
+		if(*ms < depois) depois = *ms;
+		*ms -= depois;		
 	}
 	else{
 		*ms = 500;
-		return 0;
+		
 	}
+	return isevt;
 }
 
 
