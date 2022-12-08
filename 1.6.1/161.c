@@ -61,31 +61,35 @@ int main (int argc, char* args[])
 				}break;
 			 	
 			case SDL_MOUSEBUTTONDOWN:
-				SDL_GetMouseState(&x,&y);
-				if(x > r3.x && x < r3.x + r3.w && y > r3.y && y < r3.y + r3.h){
-					selecionado = true;
-					cancelado = false;
-				    	dx=r3.x-x;
-					dy=r3.y-y;
-					xAntes = r3.x;
-					yAntes = r3.y;
-				 }
-				 else{
-				 	selecionado = false;
-					cancelado = false;
-				 } 
-				 break;
-			case SDL_MOUSEBUTTONUP:
-				SDL_GetMouseState(&x,&y);
-				if(evt.button.state==SDL_RELEASED){
-					selecionado=false;
+				if(evt.button.button==SDL_BUTTON_LEFT){
+					SDL_GetMouseState(&x,&y);
 					if(x > r3.x && x < r3.x + r3.w && y > r3.y && y < r3.y + r3.h){
-						 arrastado = true;
-						 xDepois = x;
-						 yDepois = y;
+						selecionado = true;
+						cancelado = false;
+					    	dx=r3.x-x;
+						dy=r3.y-y;
+						xAntes = r3.x;
+						yAntes = r3.y;
 					 }
+					 else{
+					 	selecionado = false;
+						cancelado = true;
+					 } 
+					 break;
 				}
-				break;
+			case SDL_MOUSEBUTTONUP:
+				if(evt.button.button==SDL_BUTTON_LEFT){
+					SDL_GetMouseState(&x,&y);
+					if(evt.button.state==SDL_RELEASED){
+						selecionado=false;
+						if(x > r3.x && x < r3.x + r3.w && y > r3.y && y < r3.y + r3.h){
+							 arrastado = true;
+							 xDepois = x;
+							 yDepois = y;
+						 }
+					}
+					break;
+				}
 			case SDL_MOUSEMOTION:
 				SDL_GetMouseState(&x,&y);
 				if(r3.x <= 460 && r3.y <= 460 && selecionado){
