@@ -4,8 +4,15 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
+void mudaCor(SDL_Renderer* ren,SDL_Surface* listaS[],SDL_Texture* listaT[],SDL_Color cor,int i,char nome[],TTF_Font *ourFont){
+	listaS[i] = TTF_RenderText_Solid(ourFont, nome,cor);  
+	listaT[i] = SDL_CreateTextureFromSurface(ren,listaS[i]);
+}
+
+
 int main (int argc, char* args[])
 {
+
     /* INICIALIZACAO */
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* win = SDL_CreateWindow("Contando o Tempo",
@@ -25,10 +32,10 @@ int main (int argc, char* args[])
     listaSurfaceText[1] = TTF_RenderText_Solid(ourFont, "Quit",padrao); 
      
     struct SDL_Texture* listaTextureText[2];
-    listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
+	listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
     listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);
     
-    int i;  
+    int i;
     SDL_Point mouse = {0,0};
     SDL_Rect recPlay = {270,120,100,30};
     SDL_Rect recQuit = {270,200,100,30};
@@ -47,18 +54,22 @@ int main (int argc, char* args[])
 				case SDL_MOUSEMOTION:
 						SDL_GetMouseState(&mouse.x,&mouse.y);
 						if(SDL_PointInRect(&mouse,&recPlay)){
-							listaSurfaceText[0] = TTF_RenderText_Solid(ourFont, "Play",focus);  
-					   		listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
+							//listaSurfaceText[0] = TTF_RenderText_Solid(ourFont, "Play",focus);  
+					   		//listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
+					   		mudaCor(ren,listaSurfaceText,listaTextureText,focus,0,"Play",ourFont);
 					   	}
 					   	else if(SDL_PointInRect(&mouse,&recQuit)){
-					   		listaSurfaceText[1] = TTF_RenderText_Solid(ourFont, "Quit",focus);  
-					   		listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);
+					   		//listaSurfaceText[1] = TTF_RenderText_Solid(ourFont, "Quit",focus);  
+					   		//listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);
+					   		mudaCor(ren,listaSurfaceText,listaTextureText,focus,1,"Quit",ourFont);
 					   	}
 					   	else{
-							listaSurfaceText[0] = TTF_RenderText_Solid(ourFont, "Play",padrao);  
+							/*listaSurfaceText[0] = TTF_RenderText_Solid(ourFont, "Play",padrao);  
 							listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
 							listaSurfaceText[1] = TTF_RenderText_Solid(ourFont, "Quit",padrao);  
-							listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);
+							listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);*/
+					   		mudaCor(ren,listaSurfaceText,listaTextureText,padrao,0,"Play",ourFont);
+					   		mudaCor(ren,listaSurfaceText,listaTextureText,padrao,1,"Quit",ourFont);
 							selecionado = false;
 					   	}
 				break;
