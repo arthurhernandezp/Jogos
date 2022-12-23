@@ -28,11 +28,7 @@ int main (int argc, char* args[])
     listaTextureText[0] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[0]);
     listaTextureText[1] = SDL_CreateTextureFromSurface(ren,listaSurfaceText[1]);
     
-    int i;
-    /*for(i= 0; i < 2;i++){
-    	SDL_FreeSurface(listaSurfaceText[i]);
-    }*/
-    
+    int i;  
     SDL_Point mouse = {0,0};
     SDL_Rect recPlay = {270,120,100,30};
     SDL_Rect recQuit = {270,200,100,30};
