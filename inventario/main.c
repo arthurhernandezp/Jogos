@@ -28,13 +28,19 @@ typedef struct listaSeqItens{
 }listaSeqItens;
 
 
-void constroi(listaSeqItens* L){
+void constroi(listaSeqItens* L,int x,int y){
 	L->n = 0;
-	 for(int i = 0; i<6;i++){
-    	for(int j = 0;j<2;j++){
+	int aux = x;
+	for(int i = 0; i<6;i++){
+		for(int j = 0;j<2;j++){
 			L->matrizItens[i][j].img = NULL;
-    	 	L->matrizItens[i][j].state = false;
-    	}
+		 	L->matrizItens[i][j].state = false;
+		 	SDL_Rect recAux = {x,y,64,64};
+		 	L->matrizItens[i][j].r = recAux;
+		 	x+=65;
+		}
+		x= aux;
+    	y+=65;
     }
 }
 
@@ -83,42 +89,17 @@ int main (int argc, char* args[])
     SDL_Rect cI;
     SDL_Rect r = { 251,101, 64,64 };
     SDL_Rect c;
+ 	int i = 0;
+    int j = 0;
+    int x, y,dx,dy;
+    int xAntes, yAntes;
     //Criação do primeiro inventario
     listaSeqItens lista;
-    int i = 0;
-    int j = 0;
-    int x = 250;
-    int y =100;
-    for(i = 0; i<6;i++){
-    	for(j = 0;j<2;j++){
-    		SDL_Rect recAux = {x,y,64,64};
-    	 	lista.matrizItens[i][j].r = recAux;
-    	 	x+=65;
-    	 	lista.matrizItens[i][j].state = false;
-    	}
-    	x= 250;
-    	y+=65;
-    }
-    constroi(&lista);
+    constroi(&lista,250,100);
     //Criação do segundo inventario
     listaSeqItens lista2;
-    i = 0;
-    j = 0;
-    x = 550;
-    y =100;
-    int x1,y1;
-    for(i = 0; i<6;i++){
-    	for(j = 0;j<2;j++){
-    		SDL_Rect recAux2 = {x,y,64,64};
-    		lista2.matrizItens[i][j].r = recAux2;
-    	 	x+=65;
-    	 	lista2.matrizItens[i][j].state = false;
-    	}
-    	x= 550;
-    	y+=65;
-    }
-    constroi(&lista2);
-    i = j = 0;
+    int x1,y1,x2,y2;
+    constroi(&lista2,550,100);
     SDL_Point mouse = {0,0};
     int randAux = 0;
     bool selecionado = false;
@@ -126,9 +107,9 @@ int main (int argc, char* args[])
     while (continua) {
         SDL_SetRenderDrawColor(ren, 255,0,255,0);
         SDL_RenderClear(ren);
-      	Uint32 antes = SDL_GetTicks();
-        int isevt = AUX_WaitEventTimeoutCount(&evt,&espera);       
-        if(isevt){       	
+      //	Uint32 antes = SDL_GetTicks();
+       // int isevt = AUX_WaitEventTimeoutCount(&evt,&espera);       
+        while(SDL_PollEvent(&evt)){       	
 		switch (evt.type) {
 		    case SDL_QUIT:
 		    	continua = false;
@@ -182,6 +163,10 @@ int main (int argc, char* args[])
 							if(SDL_PointInRect(&mouse,&lista.matrizItens[x1][y1].r) && lista.matrizItens[x1][y1].state){
 								encontrou = true;
 								selecionado = true;
+								dx=lista.matrizItens[x1][y1].r.x-mouse.x;
+								dy=lista.matrizItens[x1][y1].r.y-mouse.y;
+								xAntes = lista.matrizItens[x1][y1].r.x;
+								yAntes = lista.matrizItens[x1][y1].r.y;
 								break;
 							}
 							else{
@@ -192,21 +177,47 @@ int main (int argc, char* args[])
 						}
 						if(encontrou) break;
 					}
+				break;
 			case SDL_MOUSEBUTTONUP:	
-						if(evt.button.button==SDL_BUTTON_LEFT){
-							if(evt.button.state==SDL_RELEASED){
-								if(SDL_PointInRect(&mouse,&lista.matrizItens[x1][y1].r) && selecionado) {						
-									encontrou = false;
-									selecionado = false;
-									printf("Encontrou!!\n");
-								}
-							
-								else{
-									printf("NAAAAO Encontrou!!\n");
+					if(evt.button.button==SDL_BUTTON_LEFT){
+						if(evt.button.state==SDL_RELEASED){
+							if(SDL_PointInRect(&mouse,&lista.matrizItens[x1][y1].r) && selecionado) {						
+								encontrou = false;
+								selecionado = false;
+								printf("Encontrou!!\n");
+								lista.matrizItens[x1][y1].r.x = xAntes;
+								lista.matrizItens[x1][y1].r.y = yAntes;
+								 for(x2 = 0; x2<6;x2++){
+									for(y2 = 0;y2<2;y2++){
+										if(SDL_PointInRect(&mouse,&lista2.matrizItens[x2][y2].r) 
+										&& !lista2.matrizItens[x2][y2].state){
+											encontrou = true;
+											lista2.matrizItens[x2][y2].state = true;
+											lista2.matrizItens[x2][y2].img = lista.matrizItens[x1][y1].img;
+											lista.matrizItens[x1][y1].img = NULL;
+											(lista2.n)++;
+											(lista1.n)--; 
+											i = x1;
+											j = y1;
+										}
+									}
 								}
 							}
+							else{
+								printf("NAAAAO Encontrou!!\n");
+							}
+						}
+					}
+					break;
+					case SDL_MOUSEMOTION:
+						SDL_GetMouseState(&mouse.x,&mouse.y);
+						if(selecionado){
+							lista.matrizItens[x1][y1].r.x = mouse.x+dx;
+							lista.matrizItens[x1][y1].r.y = mouse.y+dy;
 						}
 					break;
+					
+					
 		}
 		
 	}
@@ -217,6 +228,7 @@ int main (int argc, char* args[])
 		for(x = 0; x<=5;x++){
 			for(y = 0;y<=1;y++){
 				SDL_RenderCopy(ren, lista.matrizItens[x][y].img, &c, &lista.matrizItens[x][y].r);
+				SDL_RenderCopy(ren, lista2.matrizItens[x][y].img, &c, &lista2.matrizItens[x][y].r);
 			}
 		}
 		//SDL_RenderCopy(ren, listaItens[randAux], &c, &r);
