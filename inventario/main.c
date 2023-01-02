@@ -107,8 +107,6 @@ int main (int argc, char* args[])
     while (continua) {
         SDL_SetRenderDrawColor(ren, 255,0,255,0);
         SDL_RenderClear(ren);
-      //	Uint32 antes = SDL_GetTicks();
-       // int isevt = AUX_WaitEventTimeoutCount(&evt,&espera);       
         while(SDL_PollEvent(&evt)){       	
 		switch (evt.type) {
 		    case SDL_QUIT:
@@ -156,8 +154,10 @@ int main (int argc, char* args[])
 						}
 						break;
 				}
+			break;
 			case SDL_MOUSEBUTTONDOWN:
 				SDL_GetMouseState(&mouse.x,&mouse.y);
+				if(mouse.x < 500){
 				   for(x1 = 0; x1<6;x1++){
 						for(y1 = 0;y1<2;y1++){
 							if(SDL_PointInRect(&mouse,&lista.matrizItens[x1][y1].r) && lista.matrizItens[x1][y1].state){
@@ -177,8 +177,31 @@ int main (int argc, char* args[])
 						}
 						if(encontrou) break;
 					}
+				}
+				else{
+					 for(x1 = 0; x1<6;x1++){
+						for(y1 = 0;y1<2;y1++){
+							if(SDL_PointInRect(&mouse,&lista2.matrizItens[x1][y1].r) && lista2.matrizItens[x1][y1].state){
+								encontrou = true;
+								selecionado = true;
+								dx=lista2.matrizItens[x1][y1].r.x-mouse.x;
+								dy=lista2.matrizItens[x1][y1].r.y-mouse.y;
+								xAntes = lista2.matrizItens[x1][y1].r.x;
+								yAntes = lista2.matrizItens[x1][y1].r.y;
+								break;
+							}
+							else{
+							
+								encontrou = false;
+								selecionado = false;
+							}
+						}
+						if(encontrou) break;
+					}
+				}
 				break;
 			case SDL_MOUSEBUTTONUP:	
+				if(mouse.x >500){
 					if(evt.button.button==SDL_BUTTON_LEFT){
 						if(evt.button.state==SDL_RELEASED){
 							if(SDL_PointInRect(&mouse,&lista.matrizItens[x1][y1].r) && selecionado) {						
@@ -196,11 +219,13 @@ int main (int argc, char* args[])
 											lista2.matrizItens[x2][y2].img = lista.matrizItens[x1][y1].img;
 											lista.matrizItens[x1][y1].img = NULL;
 											(lista2.n)++;
-											(lista1.n)--; 
+											(lista.n)--; 
 											i = x1;
 											j = y1;
+											break;
 										}
 									}
+									if(encontrou) break;
 								}
 							}
 							else{
@@ -208,14 +233,49 @@ int main (int argc, char* args[])
 							}
 						}
 					}
-					break;
-					case SDL_MOUSEMOTION:
-						SDL_GetMouseState(&mouse.x,&mouse.y);
-						if(selecionado){
-							lista.matrizItens[x1][y1].r.x = mouse.x+dx;
-							lista.matrizItens[x1][y1].r.y = mouse.y+dy;
+				}
+				else{
+					if(evt.button.button==SDL_BUTTON_LEFT){
+							if(evt.button.state==SDL_RELEASED){
+								if(SDL_PointInRect(&mouse,&lista2.matrizItens[x1][y1].r) && selecionado) {						
+									encontrou = false;
+									selecionado = false;
+									printf("Encontrou!!\n");
+									lista2.matrizItens[x1][y1].r.x = xAntes;
+									lista2.matrizItens[x1][y1].r.y = yAntes;
+									 for(x2 = 0; x2<6;x2++){
+										for(y2 = 0;y2<2;y2++){
+											if(SDL_PointInRect(&mouse,&lista.matrizItens[x2][y2].r) 
+											&& !lista.matrizItens[x2][y2].state){
+												encontrou = true;
+												lista.matrizItens[x2][y2].state = true;
+												lista.matrizItens[x2][y2].img = lista2.matrizItens[x1][y1].img;
+												lista2.matrizItens[x1][y1].img = NULL;
+												(lista.n)++;
+												(lista2.n)--; 
+												i = x1;
+												j = y1;
+												break;
+											}
+										}
+										if(encontrou) break;
+									}
+								}
+								else{
+									printf("NAAAAO Encontrou!!\n");
+								}
+							}
 						}
-					break;
+				
+				}
+				break;
+				case SDL_MOUSEMOTION:
+					SDL_GetMouseState(&mouse.x,&mouse.y);
+					if(selecionado){
+						lista.matrizItens[x1][y1].r.x = mouse.x+dx;
+						lista.matrizItens[x1][y1].r.y = mouse.y+dy;
+					}
+				break;
 					
 					
 		}
