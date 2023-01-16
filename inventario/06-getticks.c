@@ -87,8 +87,8 @@ int main (int argc, char* args[])
     /* EXECUÇÃO */
     enum states {ready=0,cancelled,clicked,dropped,dragging,clicking}; 
 	int cur_state = 0;
-    SDL_Rect rIsca = { 250,100, 20,20 };
-    SDL_Rect rPeixe = { 200,50, 20,20 };
+    SDL_Rect rIsca = { 300,100, 20,20 };
+    SDL_Rect rPeixe = { 250,50, 20,20 };
     int espera = 100;
 	Uint32 antes = 0;
 	int playing = 1;
@@ -146,7 +146,7 @@ int main (int argc, char* args[])
                         playing = 0;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                        cur_state = clicking;
+                        if(evt.button.state==SDL_PRESSED) cur_state = clicking;
                         iscaSpeed = rand()%5+10;
 				    break;
 				case SDL_MOUSEBUTTONUP:
@@ -164,29 +164,29 @@ int main (int argc, char* args[])
         	else rIsca.x -= iscaSpeed;
             espera = 100;   
         }
-       if(rPeixe.x >= 300){
+       if(rPeixe.x >= 380){
 			randAux = rand() % 7;
 			if(!listaCheia(lista)){
-				if(	!buscaElemento(lista,i,j) ){
-					printf("[%d,%d]INSERINDO\n",i,j);
-					lista.matrizItens[i][j].img = listaItens[randAux];
-					lista.matrizItens[i][j].state = true;
-					(lista.n)++;
-					j++;
-
-					if(j >= 2 && i<5){
+				printf("[%d,%d]INSERINDO\n",i,j);
+				lista.matrizItens[i][j].img = listaItens[randAux];
+				lista.matrizItens[i][j].state = true;
+				(lista.n)++;
+				j++;
+				if(j >= 2 && i<5){
 					j = 0;
 					i++;
-					}
-				}
-				else{
-					printf("Existe um elemento na proxima posição!!!");
 				}
 			}
 			else{
 				printf("Lista Cheia!!!!\n");
 			}
-			rPeixe.x = 200; 
+			rPeixe.x = 250; 
+		}
+		
+		if(rIsca.x <= 250 || rIsca.x >= (380-rIsca.w)) {
+			rIsca.x = 300;
+			rPeixe.x = 250;
+		
 		}
 		 SDL_RenderCopy(ren, imgInv, NULL, &lista.rect);
 		chamaInventario(ren,lista);
@@ -202,4 +202,3 @@ int main (int argc, char* args[])
     SDL_DestroyWindow(win);
     SDL_Quit();
 }
-
