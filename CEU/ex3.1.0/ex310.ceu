@@ -1,0 +1,75 @@
+^["@/pico/pico.ceu"]
+
+pico-state-set-title("pico-Ceu: Hello World!")
+
+task quadradoPix(pos:XY,dim:WH){
+	var clr = [0,0,255,255]
+	par {
+        every :Pico.Draw {
+            pico-state-set-color-draw(clr)
+            pico-output-draw-rect([pos,dim])
+        }
+    }
+    with {
+    	loop{
+			await 1000:ms
+		        set pos.x = pos.x + 1
+		    await 1000:ms
+		        set pos.y = pos.y - 1
+		    await 1000:ms
+		        set pos.x = pos.x - 1
+		    await 1000:ms
+		        set pos.y = pos.y + 1
+		} 
+	}
+	with {
+        loop {
+            await 1000:ms
+            set clr = [random-next()%255,random-next()%255,random-next()%255,255]
+        }
+    }
+}
+
+
+task Line (pos:XY, vel:XY) {
+    var clr = [255,0,0,255]
+    par {
+        every :Pico.Draw {
+            pico-state-set-color-draw(clr)
+            pico-output-draw-pixel(pos)
+        }
+    } with {
+        every 50:ms {
+            set pos.x = pos.x + vel.x
+            set pos.y = pos.y + vel.y
+        }
+    } with {
+        loop {
+            await 500:ms
+            set clr = [0,255,0,255]
+            await 500:ms
+            set clr = [255,0,0,255]
+        }
+    } with {
+        loop {
+            await (pos.x < -25) or (pos.x > 25)
+            set vel.x = -vel.x
+            await 100:ms
+        }
+    } with {
+        loop {
+            await (pos.y < -25) or (pos.y > 25)
+            set vel.y = -vel.y
+            await 100:ms
+        }
+    }
+}
+
+
+spawn quadradoPix([-1,1],[5,5])
+spawn Line ([-25,25], [1,-1])
+spawn Line ([-25,-25],[1,1])
+spawn Line ([0,25],   [0,-1])
+spawn Line ([0,10],   [2,1])
+
+pico-loop()
