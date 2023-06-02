@@ -4,30 +4,47 @@ pico-state-set-title("pico-Ceu: Hello World!")
 
 task quadradoPix(pos:XY,dim:WH){
 	var clr = [0,0,255,255]
+	var contator = 0;
 	par {
         every :Pico.Draw {
             pico-state-set-color-draw(clr)
             pico-output-draw-rect([pos,dim])
         }
     }
-    with {
-    	loop{
-			await 1000:ms
-		        set pos.x = pos.x + 1
-		    await 1000:ms
-		        set pos.y = pos.y - 1
-		    await 1000:ms
-		        set pos.x = pos.x - 1
-		    await 1000:ms
-		        set pos.y = pos.y + 1
-		} 
-	}
+    
 	with {
         loop {
             await 1000:ms
             set clr = [random-next()%255,random-next()%255,random-next()%255,255]
         }
-    }
+    }with {
+    	loop{
+			awaiting 1000:ms {
+		        loop {
+		        	await 50:ms
+		            set pos.x = pos.x + 1
+		        }
+		    }
+		    awaiting 1000:ms {
+		        loop {
+		        	await 50:ms
+		            set pos.y = pos.y - 1
+		        }
+		    }
+		    awaiting 1000:ms {
+		        loop {
+		        	await 50:ms
+		            set pos.x = pos.x - 1
+		        }
+		    }
+		    awaiting 1000:ms {
+		        loop {
+		        	await 50:ms
+		            set pos.y = pos.y + 1
+		        }
+		    }
+        }
+    } 
 }
 
 
